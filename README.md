@@ -62,18 +62,6 @@ Dreamspace and Glitched support:
 
 This is a **manual tracker**. It does not automatically detect Roblox rolls, potion usage, or aura drops.
 
-## 🎲 Understanding illusionary Probability
-
-The tracker uses a **1 in 10,000,000** chance per eligible roll.
-
-The displayed cumulative probability represents the chance of getting **at least one illusionary** across the recorded number of rolls:
-
-`Probability = 100 × (1 − (1 − 1/10,000,000)^rolls)`
-
-For example, **100,000 rolls ≈ 0.995%**.
-
-This is a statistical estimate, not a guarantee or a pity counter. Previous unsuccessful rolls do not increase the chance of the next roll.
-
 ## 💾 Saving Your Progress
 
 Your sessions save automatically under your Windows account:
