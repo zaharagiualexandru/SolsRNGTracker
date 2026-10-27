@@ -1,0 +1,1803 @@
+﻿<Window x:Class="CyberspaceTracker.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Sol's RNG Tracker"
+        Width="1200"
+        Height="720"
+        MinWidth="950"
+        MinHeight="550"
+        Background="#030315"
+        WindowStartupLocation="CenterScreen"
+        FontFamily="Segoe UI"
+        FontWeight="Bold"
+        TextOptions.TextFormattingMode="Display"
+        TextOptions.TextRenderingMode="Auto"
+        UseLayoutRounding="True">
+
+    <Window.Resources>
+
+        <Style x:Key="SummaryCard" TargetType="Border">
+            <Setter Property="Background" Value="#F0101329"/>
+            <Setter Property="BorderBrush" Value="#30365F"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="18"/>
+            <Setter Property="Margin" Value="0,0,12,0"/>
+        </Style>
+
+        <Style x:Key="CardLabel" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#AEB6DE"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
+        <Style x:Key="CardValue" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#F2F5FF"/>
+            <Setter Property="FontSize" Value="28"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="0,10,0,0"/>
+        </Style>
+
+        <Style x:Key="TechTagBorder" TargetType="Border">
+            <Setter Property="Background" Value="#5510162E"/>
+            <Setter Property="BorderBrush" Value="#557A8AFF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="2"/>
+            <Setter Property="Padding" Value="6,3"/>
+        </Style>
+
+        <Style TargetType="Button">
+
+            <Setter Property="Background" Value="#151A30"/>
+            <Setter Property="Foreground" Value="#EDF3FF"/>
+            <Setter Property="BorderBrush" Value="#30365F"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="16,11"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+
+            <Setter Property="Template">
+
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="Button">
+
+                        <Border x:Name="ButtonBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6"
+                                Padding="{TemplateBinding Padding}">
+
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+
+                                <Setter TargetName="ButtonBorder"
+                                        Property="BorderBrush"
+                                        Value="#858FFF"/>
+
+                            </Trigger>
+
+                            <Trigger Property="IsPressed"
+                                     Value="True">
+
+                                <Setter TargetName="ButtonBorder"
+                                        Property="Opacity"
+                                        Value="0.72"/>
+
+                            </Trigger>
+
+                            <Trigger Property="IsEnabled"
+                                     Value="False">
+
+                                <Setter TargetName="ButtonBorder"
+                                        Property="Opacity"
+                                        Value="0.40"/>
+
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+
+            </Setter>
+
+        </Style>
+
+    </Window.Resources>
+
+
+    <Grid ClipToBounds="True">
+
+        <!-- ===================================================== -->
+        <!-- ILLUSIONARY BACKGROUND                                -->
+        <!-- ===================================================== -->
+
+        <Viewbox Stretch="UniformToFill"
+                 IsHitTestVisible="False">
+
+            <Canvas Width="1200"
+                    Height="720">
+
+                <!-- Background -->
+
+                <Rectangle Width="1200"
+                           Height="720"
+                           Fill="#050818"/>
+
+
+                <!-- ================================================= -->
+                <!-- BLUE ATMOSPHERE                                   -->
+                <!-- ================================================= -->
+
+                <Ellipse x:Name="AuraGlow"
+                         Width="980"
+                         Height="760"
+                         Canvas.Left="390"
+                         Canvas.Top="60"
+                         Opacity="0.22">
+
+                    <Ellipse.Fill>
+
+                        <RadialGradientBrush>
+
+                            <GradientStop Color="#90FFFFFF"
+                                          Offset="0"/>
+
+                            <GradientStop Color="#484A68FF"
+                                          Offset="0.20"/>
+
+                            <GradientStop Color="#17275ED8"
+                                          Offset="0.46"/>
+
+                            <GradientStop Color="#00050818"
+                                          Offset="1"/>
+
+                        </RadialGradientBrush>
+
+                    </Ellipse.Fill>
+
+                </Ellipse>
+
+
+                <Ellipse x:Name="AuraGlowOuter"
+                         Width="1180"
+                         Height="880"
+                         Canvas.Left="310"
+                         Canvas.Top="10"
+                         Opacity="0.12">
+
+                    <Ellipse.Fill>
+
+                        <RadialGradientBrush>
+
+                            <GradientStop Color="#507988FF"
+                                          Offset="0"/>
+
+                            <GradientStop Color="#18284CCD"
+                                          Offset="0.42"/>
+
+                            <GradientStop Color="#00050818"
+                                          Offset="1"/>
+
+                        </RadialGradientBrush>
+
+                    </Ellipse.Fill>
+
+                </Ellipse>
+
+
+                <!-- ================================================= -->
+                <!-- OUTER RING                                        -->
+                <!-- ================================================= -->
+
+                <Grid Width="860"
+                      Height="860"
+                      Canvas.Left="405"
+                      Canvas.Top="-22"
+                      RenderTransformOrigin="0.5,0.5">
+
+                    <Grid.RenderTransform>
+
+                        <TransformGroup>
+
+                            <ScaleTransform ScaleY="0.36"/>
+
+                            <RotateTransform Angle="-15"/>
+
+                        </TransformGroup>
+
+                    </Grid.RenderTransform>
+
+
+                    <Canvas Width="860"
+                            Height="860">
+
+                        <Canvas.RenderTransform>
+
+                            <RotateTransform x:Name="OuterRingSpin"
+                                             CenterX="430"
+                                             CenterY="430"/>
+
+                        </Canvas.RenderTransform>
+
+
+                        <Ellipse Width="860"
+                                 Height="860"
+                                 Stroke="#3448F5"
+                                 StrokeThickness="5"
+                                 Opacity="0.62"/>
+
+
+                        <Ellipse Width="820"
+                                 Height="820"
+                                 Canvas.Left="20"
+                                 Canvas.Top="20"
+                                 Stroke="#A9B9FF"
+                                 StrokeThickness="2"
+                                 StrokeDashArray="24 16 3 10"
+                                 Opacity="0.36"/>
+
+
+                        <Ellipse Width="742"
+                                 Height="742"
+                                 Canvas.Left="59"
+                                 Canvas.Top="59"
+                                 Stroke="#2534C8"
+                                 StrokeThickness="2"
+                                 StrokeDashArray="8 22"
+                                 Opacity="0.28"/>
+
+
+                        <Rectangle Width="20"
+                                   Height="20"
+                                   Canvas.Left="420"
+                                   Canvas.Top="-8"
+                                   Fill="#EAF0FF"
+                                   Opacity="0.70"/>
+
+
+                        <Rectangle Width="16"
+                                   Height="16"
+                                   Canvas.Left="422"
+                                   Canvas.Top="851"
+                                   Fill="#5363FF"
+                                   Opacity="0.75"/>
+
+
+                        <Rectangle Width="26"
+                                   Height="7"
+                                   Canvas.Left="12"
+                                   Canvas.Top="426"
+                                   Fill="#DDE7FF"
+                                   Opacity="0.58"/>
+
+
+                        <Rectangle Width="18"
+                                   Height="8"
+                                   Canvas.Left="832"
+                                   Canvas.Top="426"
+                                   Fill="#6B79FF"
+                                   Opacity="0.70"/>
+
+                    </Canvas>
+
+                </Grid>
+
+
+                <!-- ================================================= -->
+                <!-- MIDDLE RING                                       -->
+                <!-- ================================================= -->
+
+                <Grid Width="700"
+                      Height="700"
+                      Canvas.Left="490"
+                      Canvas.Top="48"
+                      RenderTransformOrigin="0.5,0.5">
+
+                    <Grid.RenderTransform>
+
+                        <TransformGroup>
+
+                            <ScaleTransform ScaleY="0.43"/>
+
+                            <RotateTransform Angle="12"/>
+
+                        </TransformGroup>
+
+                    </Grid.RenderTransform>
+
+
+                    <Canvas Width="700"
+                            Height="700">
+
+                        <Canvas.RenderTransform>
+
+                            <RotateTransform x:Name="MiddleRingSpin"
+                                             CenterX="350"
+                                             CenterY="350"/>
+
+                        </Canvas.RenderTransform>
+
+
+                        <Ellipse Width="700"
+                                 Height="700"
+                                 Stroke="#4A63FF"
+                                 StrokeThickness="4"
+                                 StrokeDashArray="42 11 5 11"
+                                 Opacity="0.58"/>
+
+
+                        <Ellipse Width="638"
+                                 Height="638"
+                                 Canvas.Left="31"
+                                 Canvas.Top="31"
+                                 Stroke="#EDF3FF"
+                                 StrokeThickness="1"
+                                 Opacity="0.17"/>
+
+
+                        <Ellipse Width="600"
+                                 Height="600"
+                                 Canvas.Left="50"
+                                 Canvas.Top="50"
+                                 Stroke="#4050FF"
+                                 StrokeThickness="2"
+                                 StrokeDashArray="6 18"
+                                 Opacity="0.25"/>
+
+
+                        <Rectangle Width="14"
+                                   Height="14"
+                                   Canvas.Left="343"
+                                   Canvas.Top="-7"
+                                   Fill="#EDF3FF"
+                                   Opacity="0.72"/>
+
+
+                        <Rectangle Width="14"
+                                   Height="14"
+                                   Canvas.Left="343"
+                                   Canvas.Top="692"
+                                   Fill="#5363FF"
+                                   Opacity="0.75"/>
+
+                    </Canvas>
+
+                </Grid>
+
+
+                <!-- ================================================= -->
+                <!-- INNER RING                                        -->
+                <!-- ================================================= -->
+
+                <Grid Width="520"
+                      Height="520"
+                      Canvas.Left="600"
+                      Canvas.Top="130"
+                      RenderTransformOrigin="0.5,0.5">
+
+                    <Grid.RenderTransform>
+
+                        <TransformGroup>
+
+                            <ScaleTransform ScaleY="0.50"/>
+
+                            <RotateTransform Angle="-28"/>
+
+                        </TransformGroup>
+
+                    </Grid.RenderTransform>
+
+
+                    <Canvas Width="520"
+                            Height="520">
+
+                        <Canvas.RenderTransform>
+
+                            <RotateTransform x:Name="InnerRingSpin"
+                                             CenterX="260"
+                                             CenterY="260"/>
+
+                        </Canvas.RenderTransform>
+
+
+                        <Ellipse Width="520"
+                                 Height="520"
+                                 Stroke="#7384FF"
+                                 StrokeThickness="3"
+                                 StrokeDashArray="32 8 2 8"
+                                 Opacity="0.55"/>
+
+
+                        <Ellipse Width="468"
+                                 Height="468"
+                                 Canvas.Left="26"
+                                 Canvas.Top="26"
+                                 Stroke="#E9F1FF"
+                                 StrokeThickness="1"
+                                 Opacity="0.18"/>
+
+
+                        <Rectangle Width="12"
+                                   Height="12"
+                                   Canvas.Left="254"
+                                   Canvas.Top="-5"
+                                   Fill="#EDF3FF"
+                                   Opacity="0.70"/>
+
+                    </Canvas>
+
+                </Grid>
+
+
+                <!-- ================================================= -->
+                <!-- RADIAL BURST A                                    -->
+                <!-- ================================================= -->
+
+                <Canvas Width="720"
+                        Height="720"
+                        Canvas.Left="535"
+                        Canvas.Top="5"
+                        Opacity="0.38">
+
+                    <Canvas.RenderTransform>
+
+                        <RotateTransform x:Name="BurstSpinA"
+                                         CenterX="360"
+                                         CenterY="250"/>
+
+                    </Canvas.RenderTransform>
+
+
+                    <Path Stroke="#F8FBFF"
+                          StrokeThickness="2.4"
+                          Opacity="0.72"
+                          Data="M 360,250 L 360,22
+                                M 360,250 L 475,48
+                                M 360,250 L 598,96
+                                M 360,250 L 675,120
+                                M 360,250 L 665,270
+                                M 360,250 L 596,330
+                                M 360,250 L 548,470
+                                M 360,250 L 410,530
+                                M 360,250 L 315,520
+                                M 360,250 L 170,472
+                                M 360,250 L 110,380
+                                M 360,250 L 52,266
+                                M 360,250 L 80,115
+                                M 360,250 L 210,52"/>
+
+
+                    <Path Stroke="#7A8BFF"
+                          StrokeThickness="1"
+                          Opacity="0.58"
+                          Data="M 360,250 L 360,0
+                                M 360,250 L 515,25
+                                M 360,250 L 660,78
+                                M 360,250 L 700,250
+                                M 360,250 L 620,412
+                                M 360,250 L 440,565
+                                M 360,250 L 300,562
+                                M 360,250 L 128,465
+                                M 360,250 L 0,290
+                                M 360,250 L 68,96
+                                M 360,250 L 235,20"/>
+
+                </Canvas>
+
+
+                <!-- ================================================= -->
+                <!-- RADIAL BURST B                                    -->
+                <!-- ================================================= -->
+
+                <Canvas Width="660"
+                        Height="660"
+                        Canvas.Left="565"
+                        Canvas.Top="30"
+                        Opacity="0.26">
+
+                    <Canvas.RenderTransform>
+
+                        <RotateTransform x:Name="BurstSpinB"
+                                         CenterX="330"
+                                         CenterY="225"/>
+
+                    </Canvas.RenderTransform>
+
+
+                    <Path Stroke="#9FB1FF"
+                          StrokeThickness="1.7"
+                          Opacity="0.62"
+                          Data="M 330,225 L 430,20
+                                M 330,225 L 580,80
+                                M 330,225 L 644,154
+                                M 330,225 L 620,324
+                                M 330,225 L 520,505
+                                M 330,225 L 380,620
+                                M 330,225 L 205,594
+                                M 330,225 L 56,470
+                                M 330,225 L 18,248
+                                M 330,225 L 84,102
+                                M 330,225 L 228,18"/>
+
+                </Canvas>
+
+
+                <!-- ================================================= -->
+                <!-- CORE                                              -->
+                <!-- ================================================= -->
+
+                <Grid Width="250"
+                      Height="250"
+                      Canvas.Left="770"
+                      Canvas.Top="150"
+                      RenderTransformOrigin="0.5,0.5">
+
+                    <Grid.RenderTransform>
+
+                        <ScaleTransform x:Name="CoreScale"
+                                        ScaleX="1"
+                                        ScaleY="1"/>
+
+                    </Grid.RenderTransform>
+
+
+                    <Ellipse x:Name="CoreBloom"
+                             Width="245"
+                             Height="245"
+                             Opacity="0.74">
+
+                        <Ellipse.Fill>
+
+                            <RadialGradientBrush>
+
+                                <GradientStop Color="#FFFFFFFF"
+                                              Offset="0"/>
+
+                                <GradientStop Color="#E8F7FFFF"
+                                              Offset="0.12"/>
+
+                                <GradientStop Color="#A8CFFFFF"
+                                              Offset="0.27"/>
+
+                                <GradientStop Color="#55445DFF"
+                                              Offset="0.47"/>
+
+                                <GradientStop Color="#002B3D9C"
+                                              Offset="1"/>
+
+                            </RadialGradientBrush>
+
+                        </Ellipse.Fill>
+
+                    </Ellipse>
+
+
+                    <Ellipse Width="150"
+                             Height="150"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center"
+                             Opacity="0.80">
+
+                        <Ellipse.Fill>
+
+                            <RadialGradientBrush>
+
+                                <GradientStop Color="#FFFFFFFF"
+                                              Offset="0"/>
+
+                                <GradientStop Color="#EDF6FFFF"
+                                              Offset="0.18"/>
+
+                                <GradientStop Color="#8EBDDFFF"
+                                              Offset="0.50"/>
+
+                                <GradientStop Color="#003A55FF"
+                                              Offset="1"/>
+
+                            </RadialGradientBrush>
+
+                        </Ellipse.Fill>
+
+                    </Ellipse>
+
+
+                    <Path Fill="#F7FBFF"
+                          Opacity="0.76"
+                          Stretch="Fill"
+                          Width="96"
+                          Height="96"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center"
+                          Data="M 53,0 L 64,29 L 95,11 L 76,42 L 106,53 L 76,64 L 95,95 L 64,76 L 53,106 L 42,76 L 11,95 L 30,64 L 0,53 L 30,42 L 11,11 L 42,29 Z"/>
+
+
+                    <Path Fill="#334CFF"
+                          Opacity="0.90"
+                          Stretch="Fill"
+                          Width="38"
+                          Height="38"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center"
+                          Data="M 21,0 C 25,10 36,9 42,17 C 37,26 31,33 21,42 C 11,33 5,26 0,17 C 6,9 17,10 21,0 Z"/>
+
+                </Grid>
+
+
+                <!-- ================================================= -->
+                <!-- TECHNO FRAGMENTS                                  -->
+                <!-- ================================================= -->
+
+                <Canvas Width="1200"
+                        Height="720"
+                        Opacity="0.28">
+
+                    <Canvas.RenderTransform>
+
+                        <TranslateTransform x:Name="TechDrift"/>
+
+                    </Canvas.RenderTransform>
+
+
+                    <TextBlock Text="ドリームステート"
+                               Canvas.Left="870"
+                               Canvas.Top="392"
+                               Foreground="#C8D3FF"
+                               FontSize="28"
+                               FontWeight="Bold"
+                               Opacity="0.34"/>
+
+
+                    <TextBlock Text="the void doesn't wake it"
+                               Canvas.Left="650"
+                               Canvas.Top="154"
+                               Foreground="#C9D6FF"
+                               FontSize="13"
+                               FontWeight="Bold"
+                               Opacity="0.36"/>
+
+
+                    <Border Canvas.Left="880"
+                            Canvas.Top="148"
+                            Style="{StaticResource TechTagBorder}">
+
+                        <TextBlock Text="dreamer present"
+                                   Foreground="#EAF0FF"
+                                   FontSize="10"/>
+
+                    </Border>
+
+
+                    <Border Canvas.Left="982"
+                            Canvas.Top="118"
+                            Style="{StaticResource TechTagBorder}">
+
+                        <TextBlock Text="memory :: unstable"
+                                   Foreground="#EAF0FF"
+                                   FontSize="10"/>
+
+                    </Border>
+
+
+                    <Border Canvas.Left="842"
+                            Canvas.Top="272"
+                            Style="{StaticResource TechTagBorder}">
+
+                        <TextBlock Text="heart field"
+                                   Foreground="#EAF0FF"
+                                   FontSize="10"/>
+
+                    </Border>
+
+
+                    <Border Canvas.Left="535"
+                            Canvas.Top="226"
+                            Style="{StaticResource TechTagBorder}">
+
+                        <TextBlock Text="core drift"
+                                   Foreground="#EAF0FF"
+                                   FontSize="10"/>
+
+                    </Border>
+
+
+                    <Border Canvas.Left="604"
+                            Canvas.Top="440"
+                            Style="{StaticResource TechTagBorder}">
+
+                        <TextBlock Text="probability fracture"
+                                   Foreground="#EAF0FF"
+                                   FontSize="10"/>
+
+                    </Border>
+
+
+                    <Path Stroke="#B8C8FF"
+                          StrokeThickness="1"
+                          Opacity="0.46"
+                          Data="M 170,228 L 430,228
+                                M 530,246 L 650,246
+                                M 770,185 L 852,185
+                                M 945,145 L 1010,145
+                                M 885,408 L 1058,408
+                                M 632,454 L 735,454
+                                M 455,216 L 540,244
+                                M 920,165 L 887,264
+                                M 945,145 L 1018,78
+                                M 645,450 L 704,360"/>
+
+                </Canvas>
+
+
+                <!-- ================================================= -->
+                <!-- SHARDS                                            -->
+                <!-- ================================================= -->
+
+                <Canvas Width="1200"
+                        Height="720"
+                        Opacity="0.16">
+
+                    <Canvas.RenderTransform>
+
+                        <TranslateTransform x:Name="ShardDrift"/>
+
+                    </Canvas.RenderTransform>
+
+
+                    <Polygon Fill="#90A1FF"
+                             Points="770,120 786,162 749,151"/>
+
+
+                    <Polygon Fill="#DDE7FF"
+                             Points="1016,120 1038,162 995,150"/>
+
+
+                    <Polygon Fill="#7D8FFF"
+                             Points="1055,240 1092,254 1059,280"/>
+
+
+                    <Polygon Fill="#EAF1FF"
+                             Points="550,298 580,313 555,338"/>
+
+
+                    <Polygon Fill="#8997FF"
+                             Points="900,502 934,524 893,536"/>
+
+
+                    <Polygon Fill="#DCE8FF"
+                             Points="670,528 702,548 660,558"/>
+
+                </Canvas>
+
+            </Canvas>
+
+        </Viewbox>
+
+
+        <!-- ===================================================== -->
+        <!-- DARK UI OVERLAY                                       -->
+        <!-- ===================================================== -->
+
+        <Rectangle IsHitTestVisible="False">
+
+            <Rectangle.Fill>
+
+                <LinearGradientBrush StartPoint="0,0"
+                                     EndPoint="1,0">
+
+                    <GradientStop Color="#F5050818"
+                                  Offset="0"/>
+
+                    <GradientStop Color="#D8050818"
+                                  Offset="0.36"/>
+
+                    <GradientStop Color="#95050818"
+                                  Offset="0.64"/>
+
+                    <GradientStop Color="#58050818"
+                                  Offset="1"/>
+
+                </LinearGradientBrush>
+
+            </Rectangle.Fill>
+
+        </Rectangle>
+
+
+        <Rectangle Height="255"
+                   VerticalAlignment="Top"
+                   IsHitTestVisible="False"
+                   Opacity="0.42">
+
+            <Rectangle.Fill>
+
+                <LinearGradientBrush StartPoint="0,0"
+                                     EndPoint="0,1">
+
+                    <GradientStop Color="#B8050818"
+                                  Offset="0"/>
+
+                    <GradientStop Color="#70050818"
+                                  Offset="0.70"/>
+
+                    <GradientStop Color="#00050818"
+                                  Offset="1"/>
+
+                </LinearGradientBrush>
+
+            </Rectangle.Fill>
+
+        </Rectangle>
+
+
+        <!-- ===================================================== -->
+        <!-- CENTER ILLUSIONARY TEXT                               -->
+        <!-- ===================================================== -->
+
+        <Viewbox Stretch="UniformToFill"
+                 IsHitTestVisible="False">
+
+            <Canvas Width="1200"
+                    Height="720">
+
+                <!-- Lower position + slightly transparent -->
+
+                <Canvas Canvas.Left="420"
+                        Canvas.Top="200"
+                        Width="480"
+                        Height="100"
+                        Opacity="0.68">
+
+                    <!-- 1 IN 10,000,000 -->
+
+                    <Grid Canvas.Left="0"
+                          Canvas.Top="0">
+
+                        <TextBlock Text="1 in 10,000,000"
+                                   Foreground="#26378F"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   Opacity="0.58">
+
+                            <TextBlock.Effect>
+
+                                <BlurEffect Radius="8"/>
+
+                            </TextBlock.Effect>
+
+                        </TextBlock>
+
+
+                        <TextBlock x:Name="OddsAnimatedText"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   Opacity="0.95"/>
+
+                    </Grid>
+
+
+                    <!-- ILLUSIONARY -->
+
+                    <Grid Canvas.Left="-100"
+                          Canvas.Top="22">
+
+                        <TextBlock Text="illusionary"
+                                   Foreground="#26378F"
+                                   FontSize="34"
+                                   FontWeight="Bold"
+                                   Opacity="0.58">
+
+                            <TextBlock.Effect>
+
+                                <BlurEffect Radius="11"/>
+
+                            </TextBlock.Effect>
+
+                        </TextBlock>
+
+
+                        <TextBlock x:Name="IllusionaryAnimatedText"
+                                   FontSize="34"
+                                   FontWeight="Bold"
+                                   Opacity="0.95"/>
+
+                    </Grid>
+
+                </Canvas>
+
+            </Canvas>
+
+        </Viewbox>
+
+
+        <!-- ===================================================== -->
+        <!-- ANIMATED WINDOW EDGE                                  -->
+        <!-- ===================================================== -->
+
+        <Grid Margin="8"
+              IsHitTestVisible="False"
+              ClipToBounds="True">
+
+            <Border x:Name="FramePulse"
+                    CornerRadius="6"
+                    BorderThickness="1"
+                    BorderBrush="#4B5FFF"
+                    Opacity="0.11"/>
+
+
+            <Grid Margin="2">
+
+                <Rectangle Width="72"
+                           Height="2"
+                           Fill="#7180FF"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top"/>
+
+                <Rectangle Width="2"
+                           Height="42"
+                           Fill="#7180FF"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top"/>
+
+
+                <Rectangle Width="72"
+                           Height="2"
+                           Fill="#7180FF"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Top"/>
+
+                <Rectangle Width="2"
+                           Height="42"
+                           Fill="#7180FF"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Top"/>
+
+
+                <Rectangle Width="72"
+                           Height="2"
+                           Fill="#7180FF"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Bottom"/>
+
+                <Rectangle Width="2"
+                           Height="42"
+                           Fill="#7180FF"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Bottom"/>
+
+
+                <Rectangle Width="72"
+                           Height="2"
+                           Fill="#7180FF"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Bottom"/>
+
+                <Rectangle Width="2"
+                           Height="42"
+                           Fill="#7180FF"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Bottom"/>
+
+            </Grid>
+
+
+            <!-- TOP SWEEP -->
+
+            <Grid Height="7"
+                  VerticalAlignment="Top"
+                  ClipToBounds="True">
+
+                <Rectangle Width="260"
+                           Height="2"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Opacity="0.88">
+
+                    <Rectangle.Fill>
+
+                        <LinearGradientBrush StartPoint="0,0"
+                                             EndPoint="1,0">
+
+                            <GradientStop Color="#00FFFFFF"
+                                          Offset="0"/>
+
+                            <GradientStop Color="#75A8B5FF"
+                                          Offset="0.25"/>
+
+                            <GradientStop Color="#FFFFFFFF"
+                                          Offset="0.55"/>
+
+                            <GradientStop Color="#6F7A8BFF"
+                                          Offset="0.80"/>
+
+                            <GradientStop Color="#00FFFFFF"
+                                          Offset="1"/>
+
+                        </LinearGradientBrush>
+
+                    </Rectangle.Fill>
+
+
+                    <Rectangle.Effect>
+
+                        <BlurEffect Radius="4"/>
+
+                    </Rectangle.Effect>
+
+
+                    <Rectangle.RenderTransform>
+
+                        <TranslateTransform x:Name="EdgeSweepTop"
+                                            X="-300"/>
+
+                    </Rectangle.RenderTransform>
+
+                </Rectangle>
+
+            </Grid>
+
+
+            <!-- BOTTOM SWEEP -->
+
+            <Grid Height="7"
+                  VerticalAlignment="Bottom"
+                  ClipToBounds="True">
+
+                <Rectangle Width="260"
+                           Height="2"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Opacity="0.70">
+
+                    <Rectangle.Fill>
+
+                        <LinearGradientBrush StartPoint="0,0"
+                                             EndPoint="1,0">
+
+                            <GradientStop Color="#00FFFFFF"
+                                          Offset="0"/>
+
+                            <GradientStop Color="#657889FF"
+                                          Offset="0.25"/>
+
+                            <GradientStop Color="#E8F0FF"
+                                          Offset="0.55"/>
+
+                            <GradientStop Color="#657889FF"
+                                          Offset="0.80"/>
+
+                            <GradientStop Color="#00FFFFFF"
+                                          Offset="1"/>
+
+                        </LinearGradientBrush>
+
+                    </Rectangle.Fill>
+
+
+                    <Rectangle.Effect>
+
+                        <BlurEffect Radius="4"/>
+
+                    </Rectangle.Effect>
+
+
+                    <Rectangle.RenderTransform>
+
+                        <TranslateTransform x:Name="EdgeSweepBottom"
+                                            X="1300"/>
+
+                    </Rectangle.RenderTransform>
+
+                </Rectangle>
+
+            </Grid>
+
+
+            <!-- LEFT SWEEP -->
+
+            <Grid Width="7"
+                  HorizontalAlignment="Left"
+                  ClipToBounds="True">
+
+                <Rectangle Width="2"
+                           Height="190"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Top"
+                           Opacity="0.78">
+
+                    <Rectangle.Fill>
+
+                        <LinearGradientBrush StartPoint="0,0"
+                                             EndPoint="0,1">
+
+                            <GradientStop Color="#00FFFFFF"
+                                          Offset="0"/>
+
+                            <GradientStop Color="#708698FF"
+                                          Offset="0.25"/>
+
+                            <GradientStop Color="#EEF3FF"
+                                          Offset="0.55"/>
+
+                            <GradientStop Color="#708698FF"
+                                          Offset="0.80"/>
+
+                            <GradientStop Color="#00FFFFFF"
+                                          Offset="1"/>
+
+                        </LinearGradientBrush>
+
+                    </Rectangle.Fill>
+
+
+                    <Rectangle.Effect>
+
+                        <BlurEffect Radius="4"/>
+
+                    </Rectangle.Effect>
+
+
+                    <Rectangle.RenderTransform>
+
+                        <TranslateTransform x:Name="EdgeSweepLeft"
+                                            Y="-220"/>
+
+                    </Rectangle.RenderTransform>
+
+                </Rectangle>
+
+            </Grid>
+
+
+            <!-- RIGHT SWEEP -->
+
+            <Grid Width="7"
+                  HorizontalAlignment="Right"
+                  ClipToBounds="True">
+
+                <Rectangle Width="2"
+                           Height="190"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Top"
+                           Opacity="0.78">
+
+                    <Rectangle.Fill>
+
+                        <LinearGradientBrush StartPoint="0,0"
+                                             EndPoint="0,1">
+
+                            <GradientStop Color="#00FFFFFF"
+                                          Offset="0"/>
+
+                            <GradientStop Color="#708698FF"
+                                          Offset="0.25"/>
+
+                            <GradientStop Color="#EEF3FF"
+                                          Offset="0.55"/>
+
+                            <GradientStop Color="#708698FF"
+                                          Offset="0.80"/>
+
+                            <GradientStop Color="#00FFFFFF"
+                                          Offset="1"/>
+
+                        </LinearGradientBrush>
+
+                    </Rectangle.Fill>
+
+
+                    <Rectangle.Effect>
+
+                        <BlurEffect Radius="4"/>
+
+                    </Rectangle.Effect>
+
+
+                    <Rectangle.RenderTransform>
+
+                        <TranslateTransform x:Name="EdgeSweepRight"
+                                            Y="760"/>
+
+                    </Rectangle.RenderTransform>
+
+                </Rectangle>
+
+            </Grid>
+
+        </Grid>
+
+
+        <!-- ===================================================== -->
+        <!-- TRACKER UI                                            -->
+        <!-- ===================================================== -->
+
+        <Grid Margin="30">
+
+            <Grid.RowDefinitions>
+
+                <RowDefinition Height="Auto"/>
+
+                <RowDefinition Height="Auto"/>
+
+                <RowDefinition Height="Auto"/>
+
+                <RowDefinition Height="*"/>
+
+                <RowDefinition Height="Auto"/>
+
+            </Grid.RowDefinitions>
+
+
+            <TextBlock Text="Cyberspace Tracker"
+                       Foreground="#F2F5FF"
+                       FontSize="28"
+                       FontWeight="Bold"
+                       Margin="0,0,0,26"/>
+
+
+            <!-- ================================================= -->
+            <!-- SUMMARY CARDS                                     -->
+            <!-- ================================================= -->
+
+            <UniformGrid Grid.Row="1"
+                         Columns="4"
+                         Margin="0,0,0,26">
+
+
+                <!-- TOTAL -->
+
+                <Border Style="{StaticResource SummaryCard}">
+
+                    <StackPanel>
+
+                        <TextBlock Text="Total rolls"
+                                   Style="{StaticResource CardLabel}"/>
+
+                        <TextBlock x:Name="TotalRollsText"
+                                   Text="0"
+                                   Style="{StaticResource CardValue}"/>
+
+                    </StackPanel>
+
+                </Border>
+
+
+                <!-- META - PURE WHITE -->
+
+                <Border Style="{StaticResource SummaryCard}">
+
+                    <StackPanel>
+
+                        <TextBlock Text="Meta"
+                                   Style="{StaticResource CardLabel}"
+                                   Foreground="#FFFFFF"/>
+
+                        <TextBlock x:Name="TotalMetaText"
+                                   Text="0"
+                                   Style="{StaticResource CardValue}"
+                                   Foreground="#FFFFFF"/>
+
+                    </StackPanel>
+
+                </Border>
+
+
+                <!-- ILLUSIONARY -->
+
+                <Border Style="{StaticResource SummaryCard}">
+
+                    <StackPanel>
+
+                        <TextBlock x:Name="SummaryIllusionaryLabel"
+                                   Style="{StaticResource CardLabel}"
+                                   Text="illusionary"/>
+
+                        <TextBlock x:Name="TotalIllusionaryText"
+                                   Text="0"
+                                   Style="{StaticResource CardValue}"/>
+
+                    </StackPanel>
+
+                </Border>
+
+
+                <!-- ILLUSIONARY CHANCE -->
+
+                <Border Style="{StaticResource SummaryCard}"
+                        Margin="0">
+
+                    <StackPanel>
+
+                        <WrapPanel>
+
+                            <TextBlock x:Name="SummaryIllusionaryChanceIllusionaryLabel"
+                                       Style="{StaticResource CardLabel}"
+                                       Text="illusionary"/>
+
+                            <TextBlock Text=" chance"
+                                       Style="{StaticResource CardLabel}"/>
+
+                        </WrapPanel>
+
+
+                        <TextBlock x:Name="OverallChanceText"
+                                   Text="0.00%"
+                                   Style="{StaticResource CardValue}"
+                                   Foreground="#9797FF"/>
+
+                    </StackPanel>
+
+                </Border>
+
+            </UniformGrid>
+
+
+            <!-- ================================================= -->
+            <!-- SESSION TITLE                                     -->
+            <!-- ================================================= -->
+
+            <DockPanel Grid.Row="2"
+                       Margin="0,0,0,14">
+
+                <TextBlock Text="Session history"
+                           Foreground="#EDF3FF"
+                           FontSize="18"/>
+
+
+                <TextBlock x:Name="SessionCountText"
+                           Text="0 cyberspaces"
+                           Foreground="#A5ACD0"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Center"/>
+
+            </DockPanel>
+
+
+            <!-- ================================================= -->
+            <!-- TABLE                                             -->
+            <!-- ================================================= -->
+
+            <Border Grid.Row="3"
+                    Background="#F10C1020"
+                    BorderBrush="#30365F"
+                    BorderThickness="1"
+                    CornerRadius="10"
+                    Padding="8">
+
+                <DataGrid x:Name="SessionsTable"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="False"
+                          CanUserReorderColumns="False"
+                          CanUserResizeColumns="False"
+                          CanUserSortColumns="False"
+                          IsReadOnly="True"
+                          SelectionMode="Single"
+                          HeadersVisibility="Column"
+                          GridLinesVisibility="None"
+                          Background="Transparent"
+                          Foreground="#EDF3FF"
+                          BorderThickness="0"
+                          RowBackground="#11162A"
+                          AlternatingRowBackground="#0D1122"
+                          RowHeight="46"
+                          ColumnHeaderHeight="44"
+                          FontSize="14"
+                          FontWeight="Bold">
+
+
+                    <DataGrid.Resources>
+
+
+                        <Style TargetType="DataGridColumnHeader">
+
+                            <Setter Property="Background"
+                                    Value="#0C1020"/>
+
+                            <Setter Property="Foreground"
+                                    Value="#A5ACD0"/>
+
+                            <Setter Property="FontWeight"
+                                    Value="Bold"/>
+
+                            <Setter Property="Padding"
+                                    Value="10,8"/>
+
+                            <Setter Property="BorderThickness"
+                                    Value="0"/>
+
+                        </Style>
+
+
+                        <Style TargetType="DataGridCell">
+
+                            <Setter Property="BorderThickness"
+                                    Value="0"/>
+
+                            <Setter Property="Padding"
+                                    Value="10,0"/>
+
+                            <Setter Property="Template">
+
+                                <Setter.Value>
+
+                                    <ControlTemplate TargetType="DataGridCell">
+
+                                        <Border Background="{TemplateBinding Background}"
+                                                Padding="{TemplateBinding Padding}">
+
+                                            <ContentPresenter VerticalAlignment="Center"/>
+
+                                        </Border>
+
+                                    </ControlTemplate>
+
+                                </Setter.Value>
+
+                            </Setter>
+
+
+                            <Style.Triggers>
+
+                                <Trigger Property="IsSelected"
+                                         Value="True">
+
+                                    <Setter Property="Background"
+                                            Value="#30305B"/>
+
+                                    <Setter Property="Foreground"
+                                            Value="White"/>
+
+                                </Trigger>
+
+                            </Style.Triggers>
+
+                        </Style>
+
+                    </DataGrid.Resources>
+
+
+                    <DataGrid.Columns>
+
+
+                        <DataGridTextColumn Header="#"
+                                            Binding="{Binding Number}"
+                                            Width="55"/>
+
+
+                        <DataGridTextColumn Header="Date"
+                                            Binding="{Binding Date, StringFormat=dd/MM/yyyy}"
+                                            Width="*"
+                                            MinWidth="120"/>
+
+
+                        <DataGridTextColumn Header="Warp"
+                                            Binding="{Binding Warps}"
+                                            Width="75"/>
+
+
+                        <DataGridTextColumn Header="Tidal"
+                                            Binding="{Binding TidalWaveShifters}"
+                                            Width="75"/>
+
+
+                        <DataGridCheckBoxColumn Header="PLC"
+                                                Binding="{Binding PlcEnabled}"
+                                                Width="65"/>
+
+
+                        <DataGridTextColumn Header="Total rolls"
+                                            Binding="{Binding TotalRolls, StringFormat=N0}"
+                                            Width="*"
+                                            MinWidth="135"/>
+
+
+                        <!-- META PURE WHITE -->
+
+                        <DataGridTextColumn Binding="{Binding Metas}"
+                                            Width="75">
+
+                            <DataGridTextColumn.Header>
+
+                                <TextBlock Text="Meta"
+                                           Foreground="#FFFFFF"
+                                           FontWeight="Bold"/>
+
+                            </DataGridTextColumn.Header>
+
+
+                            <DataGridTextColumn.ElementStyle>
+
+                                <Style TargetType="TextBlock">
+
+                                    <Setter Property="Foreground"
+                                            Value="#FFFFFF"/>
+
+                                </Style>
+
+                            </DataGridTextColumn.ElementStyle>
+
+                        </DataGridTextColumn>
+
+
+                        <!-- ILLUSIONARY -->
+
+                        <DataGridTextColumn Binding="{Binding Illusionaries}"
+                                            Width="115">
+
+                            <DataGridTextColumn.Header>
+
+                                <TextBlock x:Name="TableIllusionaryHeader"
+                                           Text="illusionary"
+                                           FontWeight="Bold"/>
+
+                            </DataGridTextColumn.Header>
+
+                        </DataGridTextColumn>
+
+
+                        <DataGridTextColumn Header="Chance"
+                                            Binding="{Binding ChanceDisplay}"
+                                            Width="100"/>
+
+                    </DataGrid.Columns>
+
+                </DataGrid>
+
+            </Border>
+
+
+            <!-- ================================================= -->
+            <!-- BUTTONS                                           -->
+            <!-- ================================================= -->
+
+            <Grid Grid.Row="4"
+                  Margin="0,18,0,0">
+
+                <Grid.ColumnDefinitions>
+
+                    <ColumnDefinition Width="*"/>
+
+                    <ColumnDefinition Width="Auto"/>
+
+                </Grid.ColumnDefinitions>
+
+
+                <StackPanel Orientation="Horizontal">
+
+                    <Button x:Name="AddSessionButton"
+                            Content="+ Add Cyberspace"
+                            Background="#4141DA"/>
+
+
+                    <Button x:Name="EditSessionButton"
+                            Content="Edit selected"
+                            Margin="10,0,0,0"/>
+
+
+                    <Button x:Name="DeleteSessionButton"
+                            Content="Delete selected"
+                            Foreground="#DCA5B5"
+                            Margin="10,0,0,0"/>
+
+                </StackPanel>
+
+
+                <CheckBox x:Name="PauseMotion"
+                          Grid.Column="1"
+                          Content="Pause background"
+                          Foreground="#A5ACD0"
+                          Margin="16,0,0,0"
+                          VerticalAlignment="Center"/>
+
+            </Grid>
+
+        </Grid>
+
+
+        <!-- ===================================================== -->
+        <!-- BACKGROUND ANIMATIONS                                 -->
+        <!-- ===================================================== -->
+
+        <Grid.Triggers>
+
+            <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+
+                <BeginStoryboard Name="BackgroundMotion">
+
+                    <Storyboard>
+
+
+                        <DoubleAnimation Storyboard.TargetName="OuterRingSpin"
+                                         Storyboard.TargetProperty="Angle"
+                                         From="0"
+                                         To="360"
+                                         Duration="0:1:10"
+                                         RepeatBehavior="Forever"/>
+
+
+                        <DoubleAnimation Storyboard.TargetName="MiddleRingSpin"
+                                         Storyboard.TargetProperty="Angle"
+                                         From="0"
+                                         To="-360"
+                                         Duration="0:0:52"
+                                         RepeatBehavior="Forever"/>
+
+
+                        <DoubleAnimation Storyboard.TargetName="InnerRingSpin"
+                                         Storyboard.TargetProperty="Angle"
+                                         From="0"
+                                         To="360"
+                                         Duration="0:0:34"
+                                         RepeatBehavior="Forever"/>
+
+
+                        <DoubleAnimation Storyboard.TargetName="BurstSpinA"
+                                         Storyboard.TargetProperty="Angle"
+                                         From="0"
+                                         To="360"
+                                         Duration="0:0:32"
+                                         RepeatBehavior="Forever"/>
+
+
+                        <DoubleAnimation Storyboard.TargetName="BurstSpinB"
+                                         Storyboard.TargetProperty="Angle"
+                                         From="0"
+                                         To="-360"
+                                         Duration="0:0:24"
+                                         RepeatBehavior="Forever"/>
+
+
+                        <DoubleAnimation Storyboard.TargetName="AuraGlow"
+                                         Storyboard.TargetProperty="Opacity"
+                                         From="0.17"
+                                         To="0.29"
+                                         Duration="0:0:4"
+                                         AutoReverse="True"
+                                         RepeatBehavior="Forever"/>
+
+
+                        <DoubleAnimation Storyboard.TargetName="AuraGlowOuter"
+                                         Storyboard.TargetProperty="Opacity"
+                                         From="0.08"
+                                         To="0.17"
+                                         Duration="0:0:5.4"
+                                         AutoReverse="True"
+                                         RepeatBehavior="Forever"/>
+
+
+                        <DoubleAnimation Storyboard.TargetName="CoreBloom"
+                                         Storyboard.TargetProperty="Opacity"
+                                         From="0.62"
+                                         To="0.84"
+                                         Duration="0:0:1.8"
+                                         AutoReverse="True"
+                                         RepeatBehavior="Forever"/>
+
+
+                        <DoubleAnimation Storyboard.TargetName="CoreScale"
+                                         Storyboard.TargetProperty="ScaleX"
+                                         From="0.97"
+                                         To="1.06"
+                                         Duration="0:0:2.1"
+                                         AutoReverse="True"
+                                         RepeatBehavior="Forever"/>
+
+
+                        <DoubleAnimation Storyboard.TargetName="CoreScale"
+                                         Storyboard.TargetProperty="ScaleY"
+                                         From="0.97"
+                                         To="1.06"
+                                         Duration="0:0:2.1"
+                                         AutoReverse="True"
+                                         RepeatBehavior="Forever"/>
+
+
+                        <DoubleAnimation Storyboard.TargetName="TechDrift"
+                                         Storyboard.TargetProperty="X"
+                                         From="-6"
+                                         To="8"
+                                         Duration="0:0:7"
+                                         AutoReverse="True"
+                                         RepeatBehavior="Forever"/>
+
+
+                        <DoubleAnimation Storyboard.TargetName="TechDrift"
+                                         Storyboard.TargetProperty="Y"
+                                         From="-4"
+                                         To="6"
+                                         Duration="0:0:8.5"
+                                         AutoReverse="True"
+                                         RepeatBehavior="Forever"/>
+
+
+                        <DoubleAnimation Storyboard.TargetName="ShardDrift"
+                                         Storyboard.TargetProperty="Y"
+                                         From="-10"
+                                         To="12"
+                                         Duration="0:0:5"
+                                         AutoReverse="True"
+                                         RepeatBehavior="Forever"/>
+
+
+                        <DoubleAnimation Storyboard.TargetName="FramePulse"
+                                         Storyboard.TargetProperty="Opacity"
+                                         From="0.07"
+                                         To="0.19"
+                                         Duration="0:0:2.5"
+                                         AutoReverse="True"
+                                         RepeatBehavior="Forever"/>
+
+
+                        <DoubleAnimation Storyboard.TargetName="EdgeSweepTop"
+                                         Storyboard.TargetProperty="X"
+                                         From="-300"
+                                         To="1500"
+                                         Duration="0:0:4.2"
+                                         RepeatBehavior="Forever"/>
+
+
+                        <DoubleAnimation Storyboard.TargetName="EdgeSweepBottom"
+                                         Storyboard.TargetProperty="X"
+                                         From="1500"
+                                         To="-300"
+                                         Duration="0:0:5.1"
+                                         BeginTime="0:0:0.8"
+                                         RepeatBehavior="Forever"/>
+
+
+                        <DoubleAnimation Storyboard.TargetName="EdgeSweepLeft"
+                                         Storyboard.TargetProperty="Y"
+                                         From="-220"
+                                         To="900"
+                                         Duration="0:0:4.7"
+                                         BeginTime="0:0:0.4"
+                                         RepeatBehavior="Forever"/>
+
+
+                        <DoubleAnimation Storyboard.TargetName="EdgeSweepRight"
+                                         Storyboard.TargetProperty="Y"
+                                         From="900"
+                                         To="-220"
+                                         Duration="0:0:5.4"
+                                         BeginTime="0:0:1.3"
+                                         RepeatBehavior="Forever"/>
+
+                    </Storyboard>
+
+                </BeginStoryboard>
+
+            </EventTrigger>
+
+
+            <EventTrigger RoutedEvent="CheckBox.Checked"
+                          SourceName="PauseMotion">
+
+                <PauseStoryboard BeginStoryboardName="BackgroundMotion"/>
+
+            </EventTrigger>
+
+
+            <EventTrigger RoutedEvent="CheckBox.Unchecked"
+                          SourceName="PauseMotion">
+
+                <ResumeStoryboard BeginStoryboardName="BackgroundMotion"/>
+
+            </EventTrigger>
+
+        </Grid.Triggers>
+
+    </Grid>
+
+</Window>
