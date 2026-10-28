@@ -23,26 +23,23 @@ For shortcut instructions, read the **README.txt** included in the download. Kee
 
 ## ✨ Features
 
-### 🌌 Cyberspace
+### 🌐 Cyberspace
 
 - Record rolls for each Cyberspace session.
 - Track Warp potions, Tidal Wave Shifters, and PLC Device usage.
 - Record **Meta** and **illusionary** drops.
 - View total rolls, aura totals, and session history.
 - See cumulative illusionary probability based on recorded rolls.
-- Animated dark-blue visuals inspired by illusionary.
 
 ### 🌸 Dreamspace
 
 - Track potion usage for each Dreamspace session.
 - Record **Borealis** and **Dreammetric** drops.
-- Pink-themed visuals with animated white and pink waves.
 
-### ⚡ Glitched
+### ✨ Glitched
 
 - Track potion usage for each Glitched session.
 - Record **Glitch** and **Oppression** drops.
-- Animated symbols, flickering aura effects, and periodic background glitch effects.
 
 ### 🧪 Potion Tracking
 
@@ -74,7 +71,7 @@ The tracker stores separate files for each biome:
 - `dreamspace.json`
 - `glitched.json`
 
-Each Windows account has its own progress. Saves are stored separately from the app’s installation folder.
+Saves are stored separately from the app’s installation folder.
 
 To back up your progress, close the tracker and copy the entire save folder somewhere safe.
 
@@ -128,7 +125,3 @@ Bug reports, suggestions, and contributions are welcome.
 ## 📄 License
 
 Licensed under the **MIT License**. See [LICENSE](LICENSE) for details.
-
----
-
-*Unofficial fan-made companion app. Not affiliated with or endorsed by Roblox or the creators of Sol’s RNG.*
